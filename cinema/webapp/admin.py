@@ -1,5 +1,5 @@
 from django.contrib import admin
-from webapp.models import Movie, Category, Hall
+from webapp.models import Movie, Category, Hall, Seat
 
 class MovieAdmin(admin.ModelAdmin):
     list_display = ['pk', 'name', 'release_date']
@@ -17,7 +17,13 @@ class HallAdmin(admin.ModelAdmin):
     ordering = ['name']
     search_fields = ['name', 'id']
 
+class SeatAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'seat', 'hall']
+    ordering = ['hall']
+    search_fields = ['seat', 'id']
+
 admin.site.register(Movie, MovieAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Hall, HallAdmin)
+admin.site.register(Seat, SeatAdmin)
 

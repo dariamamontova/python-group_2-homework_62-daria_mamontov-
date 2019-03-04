@@ -23,3 +23,12 @@ class Hall(models.Model):
 
     def __str__(self):
         return self.name
+
+class Seat(models.Model):
+    hall = models.ForeignKey(Hall, on_delete=models.PROTECT, blank=True, verbose_name='Hall', related_name='seats')
+    row = models.IntegerField(null=True, blank=True)
+    seat = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.seat
+
