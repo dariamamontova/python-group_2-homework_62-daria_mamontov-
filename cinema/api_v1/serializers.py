@@ -1,4 +1,4 @@
-from webapp.models import Movie, Category, Hall, Seat
+from webapp.models import Movie, Category, Hall, Seat, Show
 from rest_framework import serializers
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -20,3 +20,8 @@ class SeatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seat
         fields = ('id', 'hall', 'row', 'seat')
+
+class ShowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Show
+        fields = ('id', 'movie', 'hall', 'start_date', 'finish_date', 'price')

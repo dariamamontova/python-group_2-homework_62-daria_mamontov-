@@ -32,3 +32,9 @@ class Seat(models.Model):
     def __str__(self):
         return self.seat
 
+class Show(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.PROTECT, blank=True, related_name='show_movie')
+    hall = models.ForeignKey(Hall, on_delete=models.PROTECT, blank=True, related_name='show_hall')
+    start_date = models.DateTimeField()
+    finish_date = models.DateTimeField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
