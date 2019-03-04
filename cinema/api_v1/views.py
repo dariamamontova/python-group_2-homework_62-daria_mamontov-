@@ -1,6 +1,6 @@
-from webapp.models import Movie, Category
+from webapp.models import Movie, Category, Hall
 from rest_framework import viewsets
-from api_v1.serializers import MovieSerializer, CategorySerializer
+from api_v1.serializers import MovieSerializer, CategorySerializer, HallSerializer
 
 
 class MovieViewSet(viewsets.ModelViewSet):
@@ -10,3 +10,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all().order_by('name')
     serializer_class = CategorySerializer
+
+class HallViewSet(viewsets.ModelViewSet):
+    queryset = Hall.objects.all().order_by('name')
+    serializer_class = HallSerializer
