@@ -8,7 +8,9 @@
     "poster": "posters/0468299_PE611364_S5.JPG",
     "release_date": "2019-03-14",
     "finish_date": null,
-    "category": []
+    "categories": [
+      1
+    ]
   }
 },
 {
@@ -20,9 +22,9 @@
     "poster": "posters/146.jpg",
     "release_date": "2019-03-18",
     "finish_date": "2019-03-31",
-    "category": [
-      1,
-      2
+    "categories": [
+      2,
+      3
     ]
   }
 },
@@ -32,10 +34,10 @@
   "fields": {
     "name": "\u0425\u043e\u0431\u0431\u0438\u0442",
     "description": "",
-    "poster": "",
+    "poster": "posters/0468299_PE611364_S5_nWKL7Jx.JPG",
     "release_date": "2019-03-18",
     "finish_date": null,
-    "category": [
+    "categories": [
       1
     ]
   }
@@ -83,7 +85,7 @@
   "pk": 1,
   "fields": {
     "hall": 1,
-    "row": 2,
+    "row": "2",
     "seat": "2"
   }
 },
@@ -96,6 +98,50 @@
     "start_date": "2019-03-18T00:00:00Z",
     "finish_date": "2019-03-25T13:47:05Z",
     "price": "250.00"
+  }
+},
+{
+  "model": "webapp.discount",
+  "pk": 1,
+  "fields": {
+    "name": "\u0421\u043a\u0438\u0434\u043a\u0430",
+    "discount_price": "20.00",
+    "starts_at": null,
+    "finishes_at": null
+  }
+},
+{
+  "model": "webapp.discount",
+  "pk": 2,
+  "fields": {
+    "name": "\u0421\u043a\u0438\u0434\u0430 \u0435\u0449\u0435",
+    "discount_price": "10.00",
+    "starts_at": "2019-03-06T18:47:11Z",
+    "finishes_at": null
+  }
+},
+{
+  "model": "webapp.ticket",
+  "pk": 1,
+  "fields": {
+    "show": 1,
+    "seat": 1,
+    "discount": 1,
+    "returned": false
+  }
+},
+{
+  "model": "webapp.booking",
+  "pk": 2,
+  "fields": {
+    "code": "486143",
+    "show": 1,
+    "status": "created",
+    "created_at": "2019-03-06T18:59:55.449Z",
+    "updated_at": "2019-03-06T18:59:55.449Z",
+    "seats": [
+      1
+    ]
   }
 }
 ]
