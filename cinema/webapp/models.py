@@ -1,7 +1,15 @@
 from django.db import models
+from django.urls import reverse
 import random
 import string
 from django.conf import settings
+
+class SoftDeleteManager(models.Manager):
+    def active(self):
+        return self.filter(is_deleted=False)
+
+    def deleted(self):
+        return self.filter(is_deleted=True)
 
 class Movie(models.Model):
     name = models.CharField(max_length=255)
@@ -10,6 +18,13 @@ class Movie(models.Model):
     release_date = models.DateField()
     finish_date = models.DateField(null=True, blank=True)
     categories = models.ManyToManyField('Category', related_name='film_category', verbose_name='Categories', blank=True)
+    is_deleted = models.BooleanField(default=False)
+
+    def get_absolute_url(self):
+        return reverse('api_v1:movie-detail', kwargs={'pk': self.pk})
+
+    def get_categories_display(self):
+        return self.categories.all()
 
     def __str__(self):
         return self.name
@@ -23,6 +38,7 @@ class Category(models.Model):
 
 class Hall(models.Model):
     name = models.CharField(max_length=255)
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

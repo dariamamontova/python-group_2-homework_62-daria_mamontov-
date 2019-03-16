@@ -2,7 +2,7 @@ import React from 'react';
 import Card from "../UI/Card/Card";
 
 const MovieCard = props => {
-    const {movie, className} = props;
+    const {movie, className, onDelete} = props;
 
     const {name, poster, id} = movie;
 
@@ -11,7 +11,7 @@ const MovieCard = props => {
         url: '/movies/' + id
     };
 
-    return <Card header={name} image={poster} link={link} className='h-100'/>;
+    return <Card header={name} image={poster} deleted={onDelete} link={link} className='h-100'/>;
 };
 
 
