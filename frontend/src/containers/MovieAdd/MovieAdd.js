@@ -6,11 +6,9 @@ import MovieForm from "../../components/MovieForm/MovieForm";
 
 class MovieAdd extends Component {
     state = {
-        // сообщение об ошибке
         alert: null,
     };
 
-    // вывод сообщение об ошибке
     showErrorAlert = (error) => {
         this.setState(prevState => {
             let newState = {...prevState};
@@ -19,15 +17,12 @@ class MovieAdd extends Component {
         });
     };
 
-    // сборка данных для запроса
     gatherFormData = (movie) => {
         let formData = new FormData();
         Object.keys(movie).forEach(key => {
             const value = movie[key];
             if (value) {
                 if(Array.isArray(value)) {
-                    // для полей с несколькими значениями (категорий)
-                    // нужно добавить каждое значение отдельно
                     value.forEach(item => formData.append(key, item));
                 } else {
                     formData.append(key, value);
@@ -37,28 +32,19 @@ class MovieAdd extends Component {
         return formData;
     };
 
-    // обработчик отправки формы
     formSubmitted = (movie) => {
-        // сборка данных для запроса
         const formData = this.gatherFormData(movie);
 
-        // отправка запроса
         return axios.post(MOVIES_URL, formData, {
             headers: {'Content-Type': 'multipart/form-data'}
         })
             .then(response => {
-                // при успешном создании response.data содержит данные фильма
                 const movie = response.data;
                 console.log(movie);
-                // если всё успешно, переходим на просмотр страницы фильма с id,
-                // указанным в ответе
                 this.props.history.replace('/movies/' + movie.id);
             })
             .catch(error => {
                 console.log(error);
-                // error.response - ответ с сервера
-                // при ошибке 400 в ответе с сервера содержатся ошибки валидации
-                // пока что выводим их в консоль
                 console.log(error.response);
                 this.showErrorAlert(error.response);
             });

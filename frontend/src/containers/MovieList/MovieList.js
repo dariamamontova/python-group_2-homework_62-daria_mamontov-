@@ -5,8 +5,6 @@ import {NavLink} from "react-router-dom";
 import axios from 'axios';
 
 
-// компонент для показа списка фильмов клиенту
-// фильмы запрашиваются из API в момент показа компонента на странце (mount)
 class MovieList extends Component {
     state = {
         movies: [],
@@ -21,7 +19,6 @@ class MovieList extends Component {
 
     render() {
         return <Fragment>
-            <p><NavLink to='/movies/add'>Добавить фильм</NavLink></p>
             <div className='row'>
                 {this.state.movies.map(movie => {
                     return <div className='col-xs-12 col-sm-6 col-lg-4 mt-3'  key={movie.id}>
