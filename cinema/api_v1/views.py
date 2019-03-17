@@ -46,9 +46,9 @@ class ShowViewSet(NoAuthModelViewSet):
         if hall_id:
             queryset = queryset.filter(hall_id=hall_id)
         if starts_after:
-            queryset = queryset.filter(starts_at__gte=starts_after)
+            queryset = queryset.filter(start_date__gte=starts_after)
         if starts_before:
-            queryset = queryset.filter(starts_at__lte=starts_before)
+            queryset = queryset.filter(start_date__lte=starts_before)
         return queryset
 
 class DiscountViewSet(NoAuthModelViewSet):
