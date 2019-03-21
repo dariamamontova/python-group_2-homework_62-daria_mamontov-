@@ -37,7 +37,10 @@ class HallAdd extends Component {
         const formData = this.gatherFormData(hall);
 
         return axios.post(HALLS_URL, formData, {
-            headers: {'Content-Type': 'multipart/form-data'}
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Token ' + localStorage.getItem('auth-token')
+            }
         })
             .then(response => {
                 const hall = response.data;

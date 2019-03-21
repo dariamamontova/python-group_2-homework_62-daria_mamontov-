@@ -9,6 +9,7 @@ class MovieAdd extends Component {
         alert: null,
     };
 
+
     showErrorAlert = (error) => {
         this.setState(prevState => {
             let newState = {...prevState};
@@ -36,7 +37,10 @@ class MovieAdd extends Component {
         const formData = this.gatherFormData(movie);
 
         return axios.post(MOVIES_URL, formData, {
-            headers: {'Content-Type': 'multipart/form-data'}
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Token ' + localStorage.getItem('auth-token')
+            }
         })
             .then(response => {
                 const movie = response.data;

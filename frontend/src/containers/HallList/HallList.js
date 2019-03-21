@@ -18,7 +18,13 @@ class HallList extends Component {
     }
 
     hallDelete = (id) => {
-        axios.delete(HALLS_URL + id + '/').then(response => {
+        axios.delete(HALLS_URL + id + '/', {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Token ' + localStorage.getItem('auth-token')
+            }
+        })
+            .then(response => {
             console.log(response.data);
             this.setState(prevState => {
                 let newState = {...prevState};

@@ -14,7 +14,8 @@ class HallForm extends Component {
 
         this.state = {
             submitEnabled: true,
-            hall: newHall
+            hall: newHall,
+            errors: {}
         };
 
         if(this.props.hall) {
@@ -66,19 +67,27 @@ class HallForm extends Component {
         }
     };
 
+    showErrors = (name) => {
+        if(this.state.errors && this.state.errors[name]) {
+            return this.state.errors[name].map((error, index) => <p className="text-danger" key={index}>{error}</p>);
+        }
+        return null;
+    };
+
     render() {
         if (this.state.hall) {
-            // распаковка данных фильма, чтобы было удобнее к ним обращаться
             const {name} = this.state.hall;
             const {submitEnabled} = this.state;
 
 
             return <div>
                 <form onSubmit={this.submitForm}>
+                    {this.showErrors('non_field_errors')}
                     <div className="form-group">
                         <label className="font-weight-bold">Название</label>
                         <input type="text" className="form-control" name="name" value={name}
                                onChange={this.inputChanged}/>
+                        {this.showErrors('name')}
                     </div>
                     <button disabled={!submitEnabled} type="submit"
                             className="btn btn-primary">Сохранить

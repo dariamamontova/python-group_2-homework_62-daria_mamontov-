@@ -18,7 +18,13 @@ class MovieList extends Component {
     }
 
     movieDelete = (id) => {
-        axios.delete(MOVIES_URL + id + '/').then(response => {
+        axios.delete(MOVIES_URL + id + '/', {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Token ' + localStorage.getItem('auth-token')
+            }
+        })
+            .then(response => {
             console.log(response.data);
             this.setState(prevState => {
                 let newState = {...prevState};
