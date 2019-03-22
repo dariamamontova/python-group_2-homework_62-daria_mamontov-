@@ -12,6 +12,8 @@ class Menu extends Component {
     };
 
     render() {
+        const username = localStorage.getItem('username');
+        const isAdmin = localStorage.getItem('is_admin');
         return <Fragment>
             <button onClick={this.toggle}
                     className="navbar-toggler"
@@ -25,12 +27,18 @@ class Menu extends Component {
                  id="navbarNav">
                 <ul className="navbar-nav">
                     <MenuItem to="/">Фильмы</MenuItem>
-                    <MenuItem to="/movies/add">Добавить фильм</MenuItem>
+                    {isAdmin === "true" ? <MenuItem to="/movies/add">Добавить фильм</MenuItem> : null}
                     <MenuItem to="/halls/">Залы</MenuItem>
-                    <MenuItem to="/halls/add">Добавить зал</MenuItem>
-                    {localStorage.getItem('auth-token')
-                        ? <MenuItem to="/logout">Выйти</MenuItem>
-                        : <MenuItem to="/login">Войти</MenuItem>}
+                    {isAdmin === "true" ? <MenuItem to="/halls/add">Добавить фильм</MenuItem> : null}
+                </ul>
+                <ul className="navbar-nav ml-auto">
+                    {username ? [
+                        <li className="nav-item" key="username"><span className="navbar-text">Привет, {username}!</span></li>,
+                        <MenuItem to="/logout" key="logout">Выйти</MenuItem>
+                    ] : [
+                        <MenuItem to="/login" key="login">Войти</MenuItem>,
+                        <MenuItem to="/register" key="register">Зарегистрироваться</MenuItem>
+                    ]}
                 </ul>
             </div>
         </Fragment>
