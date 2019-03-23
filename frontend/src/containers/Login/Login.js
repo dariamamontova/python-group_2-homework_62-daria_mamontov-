@@ -16,11 +16,12 @@ class Login extends Component {
         event.preventDefault();
         return axios.post(LOGIN_URL, this.state.credentials).then(response => {
             console.log(response);
-            console.log(response.data.username);
+            console.log(response.data.first_name)
             localStorage.setItem('auth-token', response.data.token);
             localStorage.setItem('username', response.data.username);
             localStorage.setItem('is_admin', response.data.is_admin);
             localStorage.setItem('is_staff', response.data.is_staff);
+            localStorage.setItem('id', response.data.id);
             if (this.props.location.state) {
                 this.props.history.replace(this.props.location.state.next);
             } else {

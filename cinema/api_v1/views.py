@@ -20,7 +20,8 @@ class LoginView(ObtainAuthToken):
             'token': token.key,
             'username': user.username,
             'is_admin': user.is_superuser,
-            'is_staff': user.is_staff
+            'is_staff': user.is_staff,
+            'id': user.id
         })
 
 class BaseViewSet(viewsets.ModelViewSet):
@@ -94,3 +95,7 @@ class UserCreateView(CreateAPIView):
     model = User
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+
+class UserViewSet(BaseViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

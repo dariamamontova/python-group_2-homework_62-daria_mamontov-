@@ -87,6 +87,7 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = ('url', 'id', 'show_url', 'show', 'seats', 'status', 'created_at', 'updated_at')
 
 class UserSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='api_v1:user-detail')
     password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
@@ -98,4 +99,4 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'email']
+        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name', 'url']
