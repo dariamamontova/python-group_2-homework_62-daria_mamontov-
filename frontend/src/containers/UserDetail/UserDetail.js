@@ -1,13 +1,15 @@
 import React, {Component} from 'react'
 import {USERS_URL} from "../../api-urls";
 import axios from "axios";
+import {NavLink} from "react-router-dom";
 
 class UserDetail extends Component {
     state = {
         user: {
             id: localStorage.getItem('id'),
             username: "",
-            first_name: ""
+            first_name: "",
+            email: ""
         }
     };
 
@@ -26,10 +28,12 @@ class UserDetail extends Component {
     }
 
     render() {
-        const {username, first_name, id} = this.state.user;
+        const {username, first_name, email, id} = this.state.user;
         return <div>
             <h1>{username}</h1>
             <p>{first_name}</p>
+            <p>{email}</p>
+            <NavLink to={'/users/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink>
         </div>
     }
 }

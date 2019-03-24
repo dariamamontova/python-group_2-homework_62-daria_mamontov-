@@ -4,7 +4,7 @@ from api_v1.serializers import MovieSerializer, CategorySerializer, HallSerializ
     ShowSerializer, DiscountSerializer, TicketSerializer, BookingSerializer, UserSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from django.contrib.auth.models import User
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token

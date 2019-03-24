@@ -1,8 +1,4 @@
 import React, {Component} from 'react'
-import axios from "axios";
-import DatePicker from 'react-datepicker';
-import Select from 'react-select';
-import {CATEGORIES_URL} from "../../api-urls";
 
 class HallForm extends Component {
     constructor(props) {

@@ -13,9 +13,10 @@ import HallEdit from './containers/HallEdit/HallEdit'
 import Layout from "./components/Layout/Layout";
 import Login from "./containers/Login/Login";
 import Logout from "./containers/Logout/Logout";
-import AuthRoute from "./components/AuthRoute/AuthRoute"
+import AuthRoute from "./components/AuthRoute/AuthRoute";
 import Register from "./containers/Register/Register";
-import UserDetail from './containers/UserDetail/UserDetail'
+import UserDetail from './containers/UserDetail/UserDetail';
+import UserForm from './components/UserForm/UserForm'
 
 class App extends Component {
     render() {
@@ -23,6 +24,7 @@ class App extends Component {
                 <BrowserRouter>
                     <Layout>
                         <Switch>
+                            <Route path="/users/:id/edit" component={UserForm}/>
                             <Route path="/login" component={Login}/>
                             <Route path="/logout" component={Logout}/>
                             <Route path="/register" component={Register}/>
