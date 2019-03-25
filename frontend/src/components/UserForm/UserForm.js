@@ -95,13 +95,13 @@ class UserForm extends Component {
                 <form onSubmit={this.formSubmitted}>
                     {this.showErrors('non_field_errors')}
                     <div className="form-row">
-                        <label className="font-weight-bold">Имя пользователя</label>
+                        <label className="font-weight-bold">Имя</label>
                         <input type="text" className="form-control" name="first_name" value={first_name}
                                onChange={this.inputChanged}/>
                         {this.showErrors('first_name')}
                     </div>
                     <div className="form-row">
-                        <label className="font-weight-bold">Фамилия пользователя</label>
+                        <label className="font-weight-bold">Фамилия</label>
                         <input type="text" className="form-control" name="last_name" value={last_name}
                                onChange={this.inputChanged}/>
                         {this.showErrors('last_name')}
