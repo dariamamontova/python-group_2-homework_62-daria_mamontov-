@@ -7,6 +7,7 @@ class Logout extends Component {
         localStorage.removeItem('username');
         localStorage.removeItem('is_admin');
         localStorage.removeItem('is_staff');
+        localStorage.removeItem('id');
         this.props.history.replace('/');
     };
 

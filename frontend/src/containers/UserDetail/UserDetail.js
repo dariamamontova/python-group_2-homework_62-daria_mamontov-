@@ -9,7 +9,8 @@ class UserDetail extends Component {
             id: localStorage.getItem('id'),
             username: "",
             first_name: "",
-            email: ""
+            email: "",
+            last_name: ""
         }
     };
 
@@ -28,11 +29,12 @@ class UserDetail extends Component {
     }
 
     render() {
-        const {username, first_name, email, id} = this.state.user;
+        const {username, first_name, last_name, email, id} = this.state.user;
         return <div>
-            <h1>{username}</h1>
-            <p>{first_name}</p>
-            <p>{email}</p>
+            <h1>Личный кабинет пользователя {username}</h1>
+            <p>Имя: {first_name}</p>
+            <p>Фамилия: {last_name}</p>
+            <p>E-mail: {email}</p>
             <NavLink to={'/users/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink>
         </div>
     }

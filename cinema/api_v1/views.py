@@ -1,7 +1,7 @@
 from webapp.models import Movie, Category, Hall, Seat, Show, Discount, Ticket, Booking
 from rest_framework import viewsets
 from api_v1.serializers import MovieSerializer, CategorySerializer, HallSerializer, SeatSerializer, \
-    ShowSerializer, DiscountSerializer, TicketSerializer, BookingSerializer, UserSerializer
+    ShowSerializer, DiscountSerializer, TicketSerializer, BookingSerializer, UserCreateSerializer, UserEditSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from django.contrib.auth.models import User
 from rest_framework.generics import CreateAPIView, UpdateAPIView
@@ -93,9 +93,15 @@ class BookingViewSet(BaseViewSet):
 
 class UserCreateView(CreateAPIView):
     model = User
-    serializer_class = UserSerializer
+    serializer_class = UserCreateSerializer
     permission_classes = [AllowAny]
 
 class UserViewSet(BaseViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserEditSerializer
+
+    def get_permissions(self):
+        permissions = super().get_permissions()
+        if self.request.method in ["POST", "DELETE", "PUT", "PATCH"]:
+            permissions.append(IsAuthenticated())
+        return permissions

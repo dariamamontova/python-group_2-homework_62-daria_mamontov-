@@ -38,10 +38,9 @@ class UserForm extends Component {
         event.preventDefault();
         if (this.passwordsMatch()) {
             const {passwordConfirm, ...restData} = this.state.user;
-            const {username, first_name, last_name, email, password} = this.state.user;
+            console.log(this.state.user);
             return axios.put(USERS_URL + localStorage.getItem('id') + '/', restData, {
             headers: {
-                'Content-Type': 'multipart/form-data',
                 'Authorization': 'Token ' + localStorage.getItem('auth-token')
             }
         }).then(response => {
@@ -102,19 +101,19 @@ class UserForm extends Component {
                         {this.showErrors('first_name')}
                     </div>
                     <div className="form-row">
-                        <label className="font-weight-bold">Имя пользователя</label>
+                        <label className="font-weight-bold">Фамилия пользователя</label>
                         <input type="text" className="form-control" name="last_name" value={last_name}
                                onChange={this.inputChanged}/>
                         {this.showErrors('last_name')}
                     </div>
                     <div className="form-row">
-                        <label className="font-weight-bold">Пароль</label>
+                        <label className="font-weight-bold">Новый пароль</label>
                         <input type="password" className="form-control" name="password" value={password}
                                onChange={this.inputChanged}/>
                         {this.showErrors('password')}
                     </div>
                     <div className="form-row">
-                        <label className="font-weight-bold">Подтверждение пароля</label>
+                        <label className="font-weight-bold">Подтверждение нового пароля</label>
                         <input type="password" className="form-control" name="passwordConfirm" value={passwordConfirm}
                                onChange={this.passwordConfirmChange}/>
                         {this.showErrors('passwordConfirm')}

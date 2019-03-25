@@ -86,9 +86,9 @@ class BookingSerializer(serializers.ModelSerializer):
         model = Booking
         fields = ('url', 'id', 'show_url', 'show', 'seats', 'status', 'created_at', 'updated_at')
 
-class UserSerializer(serializers.ModelSerializer):
+class UserCreateSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='api_v1:user-detail')
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=False)
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -97,12 +97,21 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-    def update(self, instance, validated_data):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name', 'url']
 
+class UserEditSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='api_v1:user-detail')
+    password = serializers.CharField(write_only=True, required=False)
+
+    def update(self, instance, validated_data):
+        password = validated_data.get('password')
+        if password:
+            instance.set_password(password)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.email = validated_data.get('email', instance.email)
-
         instance.save()
         return instance
 

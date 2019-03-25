@@ -21,6 +21,7 @@ class Register extends Component {
             localStorage.setItem('username', response.data.username);
             localStorage.setItem('is_admin', response.data.is_admin);
             localStorage.setItem('is_staff', response.data.is_staff);
+            localStorage.setItem('id', response.data.id);
             this.props.history.replace('/');
         }).catch(error => {
             console.log(error);
