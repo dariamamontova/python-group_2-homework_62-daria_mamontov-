@@ -1,6 +1,10 @@
 from webapp.models import Movie, Category, Hall, Seat, Show, Discount, Ticket, Booking
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import ValidationError
+
 
 class CategorySerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='api_v1:category-detail')
@@ -86,13 +90,19 @@ class BookingSerializer(serializers.ModelSerializer):
         model = Booking
         fields = ('url', 'id', 'show_url', 'show', 'seats', 'status', 'created_at', 'updated_at')
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class UserRegisterSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='api_v1:user-detail')
     password = serializers.CharField(write_only=True, required=False)
+    email = serializers.EmailField(required=True)
+
+    def validate(self, attrs):
+        if attrs.get('password') != attrs.get('password_confirm'):
+            raise ValidationError("Passwords do not match")
+        return super().validate(attrs)
 
     def create(self, validated_data):
         password = validated_data.pop('password')
-        user = User.objects.create(**validated_data)
+        user = super().create(validated_data)
         user.set_password(password)
         user.save()
         return user
@@ -101,20 +111,48 @@ class UserCreateSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name', 'url']
 
-class UserEditSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='api_v1:user-detail')
-    password = serializers.CharField(write_only=True, required=False)
+    username = serializers.CharField(read_only=True)
+    password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    new_password_confirm = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    email = serializers.EmailField(required=True, allow_blank=False)
+
+    def validate_password(self, value):
+        user = self.context['request'].user
+        if not authenticate(username=user.username, password=value):
+            raise ValidationError('Invalid password for your account')
+        return value
+
+    def validate(self, attrs):
+        if attrs.get('new_password') != attrs.get('new_password_confirm'):
+            raise ValidationError("Passwords do not match")
+        return super().validate(attrs)
+
 
     def update(self, instance, validated_data):
-        password = validated_data.get('password')
-        if password:
-            instance.set_password(password)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.email = validated_data.get('email', instance.email)
+        validated_data.pop('password')
+        new_password = validated_data.pop('new_password')
+        validated_data.pop('new_password_confirm')
+        instance = super().update(instance, validated_data)
+
+        if new_password:
+            instance.set_password(new_password)
         instance.save()
         return instance
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name', 'url']
+        fields = ['url', 'id', 'username', 'first_name', 'last_name', 'email',
+                  'password', 'new_password', 'new_password_confirm']
+
+
+class AuthTokenSerializer(serializers.Serializer):
+    token = serializers.CharField(write_only=True)
+
+    def validate_token(self, token):
+        try:
+            return Token.objects.get(key=token)
+        except Token.DoesNotExist:
+            raise ValidationError("Invalid credentials")

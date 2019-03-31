@@ -16,19 +16,24 @@ import Logout from "./containers/Logout/Logout";
 import AuthRoute from "./components/AuthRoute/AuthRoute";
 import Register from "./containers/Register/Register";
 import UserDetail from './containers/UserDetail/UserDetail';
-import UserForm from './components/UserForm/UserForm'
+import {tokenLogin} from "./store/actions/token-login";
+import {connect} from "react-redux";
 
 class App extends Component {
+
+    componentDidMount() {
+        this.props.tokenLogin();
+    }
+
     render() {
         return (
                 <BrowserRouter>
                     <Layout>
                         <Switch>
-                            <Route path="/users/:id/edit" component={UserForm}/>
+                            <AuthRoute path="/users/:id" component={UserDetail}/>
                             <Route path="/login" component={Login}/>
                             <Route path="/logout" component={Logout}/>
                             <Route path="/register" component={Register}/>
-                            <AuthRoute path="/users/" component={UserDetail}/>
                             <AuthRoute path="/halls/add" component={HallAdd}/>
                             <AuthRoute path="/halls/:id/edit" component={HallEdit}/>
                             <Route path="/halls/:id" component={HallDetail}/>
@@ -45,4 +50,11 @@ class App extends Component {
     }
 }
 
-export default App;
+const mapStateToProps = state => state.app;
+const mapDispatchToProps = dispatch => ({
+    tokenLogin: () => dispatch(tokenLogin())
+});
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

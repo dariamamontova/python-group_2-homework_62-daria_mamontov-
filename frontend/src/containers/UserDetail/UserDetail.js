@@ -1,42 +1,70 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react';
+import axios from 'axios';
 import {USERS_URL} from "../../api-urls";
-import axios from "axios";
-import {NavLink} from "react-router-dom";
+import UserForm from "../../components/UserForm/UserForm";
 
 class UserDetail extends Component {
     state = {
-        user: {
-            id: localStorage.getItem('id'),
-            username: "",
-            first_name: "",
-            email: "",
-            last_name: ""
-        }
+        user: {},
+        edit: false,
+        alert: null
     };
 
-
     componentDidMount() {
-
-        axios.get(USERS_URL + this.state.user.id)
-            .then(response => {
-                console.log(response.data);
-                return response.data;
-            })
-            .then(user => {
-                this.setState({user});
-            })
-            .catch(error => console.log(error));
+        const userId = this.props.match.params.id;
+        axios.get(USERS_URL + userId).then(response => {
+            console.log(response);
+            this.setState(prevState => {
+                return {...prevState, user: response.data};
+            });
+        }).catch(error => {
+            console.log(error);
+            console.log(error.response);
+        })
     }
 
+    onUserUpdate = (user) => {
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                user,
+                edit: false,
+                alert: {type: 'success', text: 'Данные пользователя успешно обновлены!'}
+            };
+        });
+    };
+
+    toggleEdit = () => {
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                edit: !prevState.edit,
+                alert: null
+            };
+        });
+    };
+
     render() {
-        const {username, first_name, last_name, email, id} = this.state.user;
-        return <div>
-            <h1>Личный кабинет пользователя {username}</h1>
-            <p>Имя: {first_name}</p>
-            <p>Фамилия: {last_name}</p>
-            <p>E-mail: {email}</p>
-            <NavLink to={'/users/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink>
-        </div>
+        const currentUserId = parseInt(localStorage.getItem('user_id'));
+        const {username, first_name, last_name, email} = this.state.user;
+        const alert = this.state.alert;
+        return <Fragment>
+            {alert ? <div className={"alert mt-3 py-2 alert-" + alert.type} role="alert">{alert.text}</div> : null}
+            <h1 className="mt-3">Личный кабинет</h1>
+            {username ? <p>Имя пользователя: {username}</p> : null}
+            {first_name ? <p>Имя: {first_name}</p> : null}
+            {last_name ? <p>Фамиилия: {last_name}</p> : null}
+            {email ? <p>Email: {email}</p> : null}
+            {currentUserId === this.state.user.id ? <Fragment>
+                <div className="my-4">
+                    <button className="btn btn-primary" type="button" onClick={this.toggleEdit}>Редактировать</button>
+                    <div className={this.state.edit ? "mt-4" : "mt-4 collapse"}>
+                        <h2>Редактировать</h2>
+                        <UserForm user={this.state.user} onUpdateSuccess={this.onUserUpdate}/>
+                    </div>
+                </div>
+            </Fragment> : null}
+        </Fragment>;
     }
 }
 

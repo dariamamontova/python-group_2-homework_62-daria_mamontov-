@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import MenuItem from "./MenuItem/MenuItem";
+import {connect} from "react-redux";
 
 
 class Menu extends Component {
@@ -12,9 +13,7 @@ class Menu extends Component {
     };
 
     render() {
-        const username = localStorage.getItem('username');
-        const id = localStorage.getItem('id');
-        const isAdmin = localStorage.getItem('is_admin');
+        const {username, is_admin, user_id} = this.props.auth;
         return <Fragment>
             <button onClick={this.toggle}
                     className="navbar-toggler"
@@ -28,13 +27,13 @@ class Menu extends Component {
                  id="navbarNav">
                 <ul className="navbar-nav">
                     <MenuItem to="/">Фильмы</MenuItem>
-                    {isAdmin === "true" ? <MenuItem to="/movies/add">Добавить фильм</MenuItem> : null}
+                    {is_admin ? <MenuItem to="/movies/add">Добавить фильм</MenuItem> : null}
                     <MenuItem to="/halls/">Залы</MenuItem>
-                    {isAdmin === "true" ? <MenuItem to="/halls/add">Добавить фильм</MenuItem> : null}
+                    {is_admin ? <MenuItem to="/halls/add">Добавить фильм</MenuItem> : null}
                 </ul>
                 <ul className="navbar-nav ml-auto">
-                    {username ? [
-                        <MenuItem to={"/users/" + id} key="username"><span className="navbar-text">Привет, {username}!</span></MenuItem>,
+                    {user_id ? [
+                        <MenuItem to={"/users/" + user_id} key="username"><span className="navbar-text">Привет, {username}!</span></MenuItem>,
                         <MenuItem to="/logout" key="logout">Выйти</MenuItem>
                     ] : [
                         <MenuItem to="/login" key="login">Войти</MenuItem>,
@@ -47,4 +46,7 @@ class Menu extends Component {
 }
 
 
-export default Menu
+const mapStateToProps = state => ({auth: state.auth});
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
