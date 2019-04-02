@@ -2,53 +2,33 @@ import React, {Component} from 'react'
 import {MOVIES_URL, SHOWS_URL} from "../../api-urls";
 import {NavLink} from "react-router-dom";
 import MovieCategories from "../../components/MovieCategories/MovieCategories";
+import {movieDetail} from "../../store/actions/movie-detail";
 import axios from 'axios';
 import ShowSchedule from "../../components/ShowSchedule/ShowSchedule";
 import moment from 'moment';
+import {movieList} from "../../store/actions/movie-list";
+import connect from "react-redux/es/connect/connect";
+import {loadMovie, loadShows} from "../../store/actions/movie-detail"
 
 
 
 class MovieDetail extends Component {
-    state = {
-        movie: null,
-        shows: null
-    };
+
 
     componentDidMount() {
-        const match = this.props.match;
+        this.props.loadMovie(this.props.match.params.id);
+        this.loadShows(this.props.match.params.id)
 
-        axios.get(MOVIES_URL + match.params.id)
-            .then(response => {
-                console.log(response.data);
-                return response.data;
-            })
-            .then(movie => {
-                this.setState({movie});
-                this.loadShows(movie.id);
-            })
-            .catch(error => console.log(error));
     }
 
-    loadShows = (movieId) => {
-        const startsAfter = moment().format('YYYY-MM-DD HH:mm');
-        const startsBefore = moment().add(3, 'days').format('YYYY-MM-DD');
-        const query = encodeURI(`movie_id=${movieId}&starts_after=${startsAfter}&starts_before=${startsBefore}`);
-        axios.get(`${SHOWS_URL}?${query}`).then(response => {
-            console.log(response);
-            this.setState(prevState => {
-                let newState = {...prevState};
-                newState.shows = response.data;
-                return newState;
-            })
-        }).catch(error => {
-            console.log(error);
-            console.log(error.response);
-        });
+    loadShows = (id) => {
+        this.props.loadShows(this.props.match.params.id);
     };
-    render() {
-        if (!this.state.movie) return null;
 
-        const {name, poster, description, release_date, finish_date, categories, id} = this.state.movie;
+    render() {
+        if (!this.props.movie) return null;
+
+        const {name, poster, description, release_date, finish_date, categories, id} = this.props.movie;
 
         return <div>
             {poster ? <div className='text-center'>
@@ -64,10 +44,18 @@ class MovieDetail extends Component {
 
             <NavLink to={'/movies/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink>
 
-            {this.state.shows ? <ShowSchedule shows={this.state.shows}/> : null}
+            <ShowSchedule shows={this.props.shows}/>
         </div>;
     }
 }
 
 
-export default MovieDetail;
+const mapStateToProps = state => state.movieDetail;
+
+const mapDispatchToProps = dispatch => ({
+    loadMovie: (id) => dispatch(loadMovie(id)),
+    loadShows: (id) => dispatch(loadShows(id)),
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieDetail);

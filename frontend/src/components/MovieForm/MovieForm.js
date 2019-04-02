@@ -6,13 +6,9 @@ import Select from 'react-select';
 
 
 class MovieForm extends Component {
-    // в props передаются начальные данные для фильма
-    // в дальнейшем они копируются в state и извне компонента MovieForm больше не меняются
-    // (всё остальное управление значением movie и его полей лежит на MovieForm).
     constructor(props) {
         super(props);
 
-        // пустой объект фильма для формы создания
         const newMovie = {
             name: "",
             description: "",
@@ -25,10 +21,8 @@ class MovieForm extends Component {
         this.state = {
             categories: [],
             submitEnabled: true,
-            // изначально movie пустой (для формы добавления)
             movie: newMovie,
-            posterFileName: "",
-            errors: {}
+            posterFileName: ""
         };
 
         if(this.props.movie) {
@@ -40,12 +34,10 @@ class MovieForm extends Component {
     }
 
     componentDidMount() {
-        // загружаем категории
         axios.get(CATEGORIES_URL)
             .then(response => {
                 const categories = response.data;
                 console.log(categories);
-                // и сохраняем их в state
                 this.setState(prevState => {
                     let newState = {...prevState};
                     newState.categories = categories;
@@ -58,7 +50,6 @@ class MovieForm extends Component {
             });
     }
 
-    // блокировка отправки формы на время выполнения запроса
     disableSubmit = () => {
         this.setState(prevState => {
             let newState = {...prevState};
@@ -67,7 +58,6 @@ class MovieForm extends Component {
         });
     };
 
-    // разблокировка отправки формы
     enableSubmit = () => {
         this.setState(prevState => {
             let newState = {...prevState};
@@ -96,7 +86,6 @@ class MovieForm extends Component {
         return [];
     };
 
-    // функция, обновляющая поля в this.state.movie
     updateMovieState = (fieldName, value) => {
         this.setState(prevState => {
             let newState = {...prevState};
@@ -107,25 +96,21 @@ class MovieForm extends Component {
         });
     };
 
-    // обработчик ввода в поля ввода
     inputChanged = (event) => {
         const value = event.target.value;
         const fieldName = event.target.name;
         this.updateMovieState(fieldName, value);
     };
 
-    // обработчик изменения дат
     dateChanged = (field, date) => {
         this.updateMovieState(field, date.toISOString().slice(0, 10));
     };
 
-    // обработчик изменения select
     selectChanged = (field, values) => {
         const category_ids = values.map(item => item.value);
         this.updateMovieState(field, category_ids);
     };
 
-    // обработчик выбора файла
     fileChanged = (event) => {
         const fileName = event.target.value;
         const fieldName = event.target.name;
@@ -138,8 +123,6 @@ class MovieForm extends Component {
         });
     };
 
-    // отправка формы
-    // внутри вызывает onSubmit - переданное действие - со своим фильмом в качестве аргумента.
     submitForm = (event) => {
         if(this.state.submitEnabled) {
             event.preventDefault();
@@ -158,22 +141,16 @@ class MovieForm extends Component {
 
     render() {
         if (this.state.movie) {
-            // распаковка данных фильма, чтобы было удобнее к ним обращаться
             const {name, description, release_date, finish_date} = this.state.movie;
-            // распаковка переменных из state.
             const {posterFileName, submitEnabled} = this.state;
 
-            // форматирование дат для DatePicker'ов
             const releaseDateSelected = this.dateToObject(release_date);
             const finishDateSelected = this.dateToObject(finish_date);
 
-            // сборка опций для селекта категорий
-            // (опции должны иметь формат {value: "значение", label: "подпись"} )
             const selectOptions = this.getCategoryOptions();
 
-            // сборка значений для селекта категорий
-            // (значения должны иметь тот же формат из двух полей, что и опции )
             const selectValue = this.getCategoryValue();
+            const errors = this.props.errors;
 
             return <div>
                 <form onSubmit={this.submitForm}>
