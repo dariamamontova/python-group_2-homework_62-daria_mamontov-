@@ -1,11 +1,8 @@
 import React, {Component} from 'react'
-import {MOVIES_URL, SHOWS_URL} from "../../api-urls";
 import {NavLink} from "react-router-dom";
 import MovieCategories from "../../components/MovieCategories/MovieCategories";
 import {movieDetail} from "../../store/actions/movie-detail";
-import axios from 'axios';
 import ShowSchedule from "../../components/ShowSchedule/ShowSchedule";
-import moment from 'moment';
 import {movieList} from "../../store/actions/movie-list";
 import connect from "react-redux/es/connect/connect";
 import {loadMovie, loadShows} from "../../store/actions/movie-detail"

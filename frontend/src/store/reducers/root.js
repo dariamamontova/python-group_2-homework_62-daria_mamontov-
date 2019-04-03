@@ -5,7 +5,9 @@ import tokenLoginReducer from "./app";
 import movieListReducer from "./movie-list";
 import movieEditReducer from "./movie-edit";
 import movieDetailReducer from "./movie-detail";
-import movieAddReducer from "./movie-add"
+import movieAddReducer from "./movie-add";
+import registerReducer from "./register";
+import hallDetailReduser from "./hall-detail"
 
 const rootReducer = combineReducers({
     login: loginReducer,
@@ -14,7 +16,9 @@ const rootReducer = combineReducers({
     movieList: movieListReducer,
     movieEdit: movieEditReducer,
     movieDetail: movieDetailReducer,
-    movieAdd: movieAddReducer
+    movieAdd: movieAddReducer,
+    register: registerReducer,
+    hallDetail: hallDetailReduser
 });
 
 export default rootReducer;

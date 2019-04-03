@@ -1,57 +1,39 @@
 import React, {Component} from 'react'
-import {HALLS_URL, SHOWS_URL} from "../../api-urls";
 import {NavLink} from "react-router-dom";
-import axios from 'axios';
-import moment from "moment";
 import ShowSchedule from "../../components/ShowSchedule/ShowSchedule";
+import {loadHall, loadShows} from "../../store/actions/hall-detail";
+import connect from "react-redux/es/connect/connect";
 
 class HallDetail extends Component {
-    state = {
-        hall: null,
-        shows: null
-    };
 
     componentDidMount() {
-        const match = this.props.match;
-
-        axios.get(HALLS_URL + match.params.id)
-            .then(response => {console.log(response.data); return response.data;})
-            .then(hall => {
-                this.setState({hall});
-                this.loadShows(hall.id);
-            })
-            .catch(error => console.log(error));
+        this.props.loadHall(this.props.match.params.id);
+        this.loadShows(this.props.match.params.id)
     }
 
-    loadShows = (hallId) => {
-        const startsAfter = moment().format('YYYY-MM-DD HH:mm');
-        const startsBefore = moment().add(3, 'days').format('YYYY-MM-DD');
-        const query = encodeURI(`hall_id=${hallId}&starts_after=${startsAfter}&starts_before=${startsBefore}`);
-        axios.get(`${SHOWS_URL}?${query}`).then(response => {
-            console.log(response);
-            this.setState(prevState => {
-                let newState = {...prevState};
-                newState.shows = response.data;
-                return newState;
-            })
-        }).catch(error => {
-            console.log(error);
-            console.log(error.response);
-        });
+    loadShows = (id) => {
+        this.props.loadShows(this.props.match.params.id);
     };
 
     render() {
-        if (!this.state.hall) return null;
+        if (!this.props.hall) return null;
 
-        const {name, id} = this.state.hall;
+        const {name, id} = this.props.hall;
 
         return <div>
             <h1>{name}</h1>
             <NavLink to={'/halls/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink>
-            {this.state.shows ? <ShowSchedule shows={this.state.shows}/> : null}
+            {this.props.shows ? <ShowSchedule shows={this.props.shows}/> : null}
         </div>;
     }
 }
 
+const mapStateToProps = state => state.hallDetail;
 
-export default HallDetail;
+const mapDispatchToProps = dispatch => ({
+    loadHall: (id) => dispatch(loadHall(id)),
+    loadShows: (id) => dispatch(loadShows(id)),
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(HallDetail);
