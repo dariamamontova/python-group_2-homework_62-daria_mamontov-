@@ -92,7 +92,8 @@ class BookingSerializer(serializers.ModelSerializer):
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='api_v1:user-detail')
-    password = serializers.CharField(write_only=True, required=False)
+    password = serializers.CharField(write_only=True)
+    password_confirm = serializers.CharField(write_only=True)
     email = serializers.EmailField(required=True)
 
     def validate(self, attrs):
@@ -101,6 +102,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
     def create(self, validated_data):
+        validated_data.pop('password_confirm')
         password = validated_data.pop('password')
         user = super().create(validated_data)
         user.set_password(password)
@@ -109,7 +111,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name', 'url']
+        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name', 'url', 'password_confirm']
 
 class UserSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='api_v1:user-detail')

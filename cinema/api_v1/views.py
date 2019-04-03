@@ -114,6 +114,7 @@ class UserCreateView(CreateAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes = [AllowAny]
 
+
 class UserViewSet(BaseViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
