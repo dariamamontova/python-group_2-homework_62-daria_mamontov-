@@ -11,7 +11,7 @@ class UserDetail extends Component {
     };
 
     componentDidMount() {
-        this.props.loadUser(this.props.match.params.id);
+        this.props.loadUser(this.props.match.params.id)
     }
 
     onUserUpdate = (user) => {
@@ -19,7 +19,6 @@ class UserDetail extends Component {
         this.setState(prevState => {
             return {
                 ...prevState,
-                user,
                 edit: false,
                 alert: {type: 'success', text: 'Данные пользователя успешно обновлены!'}
             };

@@ -1,10 +1,6 @@
 import React, {Component} from 'react';
-import axios from 'axios';
-import {USERS_URL} from "../../api-urls";
 import {userEdit, USER_EDIT_SUCCESS} from "../../store/actions/user-form";
 import connect from "react-redux/es/connect/connect";
-import {loadUser} from "../../store/actions/user-detail";
-import {HALL_EDIT_SUCCESS} from "../../store/actions/hall-edit";
 
 class UserForm extends Component {
     constructor(props) {
@@ -26,7 +22,7 @@ class UserForm extends Component {
         const {auth} = this.props;
         return this.props.userEdit(this.state.user, auth.token).then(result => {
             if (result.type === USER_EDIT_SUCCESS) {
-                this.props.history.push('/users/' + result.user.id);
+               this.props.onUpdateSuccess();
             }
         });
     }
