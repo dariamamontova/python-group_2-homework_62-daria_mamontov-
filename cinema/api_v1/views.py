@@ -65,7 +65,7 @@ class CategoryViewSet(BaseViewSet):
     serializer_class = CategorySerializer
 
 class HallViewSet(BaseViewSet):
-    queryset = Hall.objects.all().order_by('name')
+    queryset = Hall.objects.active().order_by('name')
     serializer_class = HallSerializer
 
     def perform_destroy(self, instance):

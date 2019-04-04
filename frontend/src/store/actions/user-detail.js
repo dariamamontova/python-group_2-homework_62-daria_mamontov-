@@ -2,9 +2,6 @@ import {USERS_URL} from "../../api-urls";
 import axios from "axios";
 
 export const USER_LOAD_SUCCESS = "USER_LOAD_SUCCESS";
-export const USER_EDIT_REQUEST = "USER_EDIT_REQUEST";
-export const USER_EDIT_SUCCESS = "USER_EDIT_SUCCESS";
-export const USER_EDIT_ERROR = "USER_EDIT_ERROR";
 
 
 

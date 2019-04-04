@@ -16,6 +16,7 @@ import Logout from "./containers/Logout/Logout";
 import AuthRoute from "./components/AuthRoute/AuthRoute";
 import Register from "./containers/Register/Register";
 import UserDetail from './containers/UserDetail/UserDetail';
+import UserForm from './components/UserForm/UserForm'
 import {tokenLogin} from "./store/actions/token-login";
 import {connect} from "react-redux";
 
@@ -31,6 +32,7 @@ class App extends Component {
                     <Layout>
                         <Switch>
                             <AuthRoute path="/users/:id" component={UserDetail}/>
+                            <Route path="/users/:id/edit" component={UserForm}/>
                             <Route path="/login" component={Login}/>
                             <Route path="/logout" component={Logout}/>
                             <Route path="/register" component={Register}/>

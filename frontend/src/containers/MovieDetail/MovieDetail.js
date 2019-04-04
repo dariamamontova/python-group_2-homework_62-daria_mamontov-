@@ -4,6 +4,7 @@ import MovieCategories from "../../components/MovieCategories/MovieCategories";
 import ShowSchedule from "../../components/ShowSchedule/ShowSchedule";
 import connect from "react-redux/es/connect/connect";
 import {loadMovie, loadShows} from "../../store/actions/movie-detail"
+import {MOVIE_DELETE_SUCCESS, movieDelete} from "../../store/actions/movie-list";
 
 
 
@@ -17,6 +18,14 @@ class MovieDetail extends Component {
 
     loadShows = (id) => {
         this.props.loadShows(this.props.match.params.id);
+    };
+
+    onDelete = (id) => {
+        this.props.movieDelete(id, this.props.auth.token).then(result => {
+            if(result.type === MOVIE_DELETE_SUCCESS) {
+                this.props.history.push('/movies/');
+            }
+        });
     };
 
     render() {
@@ -37,6 +46,7 @@ class MovieDetail extends Component {
             {description ? <p>{description}</p> : null}
 
             <NavLink to={'/movies/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink>
+            <button type="button" className="btn btn-primary" onClick={() => this.onDelete(id)}>Delete</button>
 
             <ShowSchedule shows={this.props.shows}/>
         </div>;
@@ -49,6 +59,7 @@ const mapStateToProps = state => state.movieDetail;
 const mapDispatchToProps = dispatch => ({
     loadMovie: (id) => dispatch(loadMovie(id)),
     loadShows: (id) => dispatch(loadShows(id)),
+    movieDelete: (id, token) => dispatch(movieDelete(id, token))
 });
 
 

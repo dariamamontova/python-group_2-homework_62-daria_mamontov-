@@ -11,7 +11,7 @@ const MovieCard = props => {
         url: '/movies/' + id
     };
 
-    return <Card header={name} image={poster} deleted={onDelete} link={link} className='h-100'/>;
+    return <Card header={name} image={poster} link={link} className='h-100'/>;
 };
 
 

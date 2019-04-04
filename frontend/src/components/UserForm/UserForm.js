@@ -1,47 +1,33 @@
 import React, {Component} from 'react';
-import axios from 'axios';
-import {USERS_URL} from "../../api-urls";
-
+import {userEdit, USER_EDIT_SUCCESS} from "../../store/actions/user-form";
+import connect from "react-redux/es/connect/connect";
+import {loadUser} from "../../store/actions/user-detail";
 
 class UserForm extends Component {
     constructor(props) {
         super(props);
-        const {first_name, last_name, email} = props.user;
+        const {first_name, last_name, email, id} = this.props.user.user;
         this.state = {
             user: {
-                first_name, last_name, email,
+                first_name, last_name, email, id,
                 password: '',
                 new_password: '',
                 new_password_confirm: ''
             },
             submitEnabled: true,
-            errors: {}
         }
+    }
+    componentDidMount() {
+        this.props.loadUser(this.props.match.params.id);
     }
 
     submitForm = (event) => {
         event.preventDefault();
-        this.setState({...this.state, submitEnabled: false});
-        const currentUserId = localStorage.getItem('user_id');
-        axios.patch(USERS_URL + currentUserId + '/', this.state.user, {
-            headers: {'Authorization': 'Token ' + localStorage.getItem('auth-token')}
-        }).then(response => {
-            console.log(response);
-            this.props.onUpdateSuccess(response.data);
-            // сброс ошибок
-            this.setState(prevState => ({
-                ...prevState,
-                errors: {},
-                submitEnabled: true
-            }));
-        }).catch(error => {
-            console.log(error);
-            console.log(error.response);
-            this.setState(prevState => ({
-                ...prevState,
-                errors: error.response.data,
-                submitEnabled: true
-            }));
+        const {auth} = this.props;
+        return this.props.userEdit(this.state.user, auth.token).then(result => {
+            if(result.type === USER_EDIT_SUCCESS) {
+                this.props.history.push('/halls/' + result.user.id);
+            }
         });
     };
 
@@ -115,4 +101,18 @@ class UserForm extends Component {
 }
 
 
-export default UserForm;
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        auth: state.auth
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        userEdit: (user, token) => dispatch(userEdit(user, token)),
+        loadUser: (id) => dispatch(loadUser(id))
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserForm);

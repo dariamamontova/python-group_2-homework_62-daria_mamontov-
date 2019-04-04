@@ -42,6 +42,8 @@ class Hall(models.Model):
     name = models.CharField(max_length=255)
     is_deleted = models.BooleanField(default=False)
 
+    objects = SoftDeleteManager()
+
     def __str__(self):
         return self.name
 

@@ -1,51 +1,22 @@
 import React, {Fragment, Component} from 'react'
-import {HALLS_URL} from "../../api-urls";
 import HallCard from "../../components/HallCard/HallCard";
-import {NavLink} from "react-router-dom";
-import axios from 'axios';
+import {connect} from "react-redux";
+import {loadHalls} from "../../store/actions/hall-list";
 
 
 class HallList extends Component {
-    state = {
-        halls: [],
-    };
 
     componentDidMount() {
-        axios.get(HALLS_URL)
-            .then(response => {console.log(response.data); return response.data;})
-            .then(halls => this.setState({halls}))
-            .catch(error => console.log(error));
+        this.props.loadHalls();
     }
 
-    hallDelete = (id) => {
-        axios.delete(HALLS_URL + id + '/', {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Token ' + localStorage.getItem('auth-token')
-            }
-        })
-            .then(response => {
-            console.log(response.data);
-            this.setState(prevState => {
-                let newState = {...prevState};
-                let halls = [...newState.halls]
-                let hallId = halls.findIndex(hall => {return hall.id === id});
-                halls.splice(hallId, 1);
-                newState.halls = halls;
-                return newState;
-            })
-        }).catch(error => {
-            console.log(error);
-            console.log(error.response);
-        })
-    };
 
     render() {
         return <Fragment>
             <div className='row'>
-                {this.state.halls.map(hall => {
+                {this.props.hallList.halls.map(hall => {
                     return <div className='col-xs-12 col-sm-6 col-lg-4 mt-3'  key={hall.id}>
-                        <HallCard hall={hall} onDelete={() => this.hallDelete(hall.id)}/>
+                        <HallCard hall={hall}/>
                     </div>
                 })}
             </div>
@@ -54,4 +25,13 @@ class HallList extends Component {
 }
 
 
-export default HallList;
+const mapStateToProps = (state) => ({
+        hallList: state.hallList
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    loadHalls: () => dispatch(loadHalls())
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(HallList);

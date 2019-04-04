@@ -11,7 +11,7 @@ const HallCard = props => {
         url: '/halls/' + id
     };
 
-    return <Card header={name} link={link} deleted={onDelete} className='h-100'/>;
+    return <Card header={name} link={link} className='h-100'/>;
 };
 
 
