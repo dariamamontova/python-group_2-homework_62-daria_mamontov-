@@ -50,7 +50,7 @@ class MovieDetail extends Component {
             {is_admin ? <NavLink to={'/movies/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink> : null}
             {is_admin ? <button type="button" className="btn btn-primary" onClick={() => this.onDelete(id)}>Delete</button> : null}
 
-            {this.props.shows ? <ShowSchedule shows={this.props.shows}/> : null}
+            {this.props.movie.shows ? <ShowSchedule shows={this.props.movie.shows}/> : null}
         </div>;
     }
 }
