@@ -29,13 +29,15 @@ class MovieDetail extends Component {
     };
 
     render() {
-        if (!this.props.movie) return null;
+        if (!this.props.movie.movie) return null;
+        const {is_admin} = this.props.auth;
+        const {name, poster, description, release_date, finish_date, categories, id} = this.props.movie.movie
 
-        const {name, poster, description, release_date, finish_date, categories, id} = this.props.movie;
-
-        return <div>
-            {poster ? <div className='text-center'>
-                <img className="img-fluid rounded" src={poster}/>
+        return <div className="mt-3">
+            {poster ? <div className='row'>
+                <div className="col col-xs-10 col-sm-8 col-md-6 col-lg-4 mx-auto">
+                    <img className="img-fluid rounded" src={poster} alt={"постер"}/>
+                </div>
             </div> : null}
 
             <h1>{name}</h1>
@@ -45,16 +47,20 @@ class MovieDetail extends Component {
             <p className="text-secondary">В прокате c: {release_date} до: {finish_date ? finish_date : "Неизвестно"}</p>
             {description ? <p>{description}</p> : null}
 
-            <NavLink to={'/movies/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink>
-            <button type="button" className="btn btn-primary" onClick={() => this.onDelete(id)}>Delete</button>
+            {is_admin ? <NavLink to={'/movies/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink> : null}
+            {is_admin ? <button type="button" className="btn btn-primary" onClick={() => this.onDelete(id)}>Delete</button> : null}
 
-            <ShowSchedule shows={this.props.shows}/>
+            {this.props.shows ? <ShowSchedule shows={this.props.shows}/> : null}
         </div>;
     }
 }
 
 
-const mapStateToProps = state => state.movieDetail;
+const mapStateToProps = state => ({
+    auth: state.auth,
+    movie: state.movieDetail
+})
+
 
 const mapDispatchToProps = dispatch => ({
     loadMovie: (id) => dispatch(loadMovie(id)),

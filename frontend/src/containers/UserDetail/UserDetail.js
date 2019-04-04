@@ -43,12 +43,11 @@ class UserDetail extends Component {
         return <Fragment>
             {alert ? <div className={"alert mt-3 py-2 alert-" + alert.type} role="alert">{alert.text}</div> : null}
             <h1 className="mt-3">Личный кабинет</h1>
-            {username ? <p>Имя пользователя: {username}</p> : null}
+            {username ? <p>Пользователь: {username}</p> : null}
             {first_name ? <p>Имя: {first_name}</p> : null}
-            {last_name ? <p>Фамиилия: {last_name}</p> : null}
+            {last_name ? <p>Фамилия: {last_name}</p> : null}
             {email ? <p>Email: {email}</p> : null}
-            {currentUserId === this.props.user.user.id | this.state.edit === true
-                ? <Fragment>
+            {currentUserId === this.props.user.user.id ? <Fragment>
                 <div className="my-4">
                     <button className="btn btn-primary" type="button" onClick={this.toggleEdit}>Редактировать</button>
                     <div className={this.state.edit ? "mt-4" : "mt-4 collapse"}>

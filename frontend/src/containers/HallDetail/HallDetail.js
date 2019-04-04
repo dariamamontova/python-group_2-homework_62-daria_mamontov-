@@ -27,13 +27,13 @@ class HallDetail extends Component {
 
     render() {
         if (!this.props.hall.hall) return null;
-
         const {name, id} = this.props.hall.hall;
+        const {is_admin} = this.props.auth;
 
         return <div>
             <h1>{name}</h1>
-            <NavLink to={'/halls/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink>
-            <button type="button" className="btn btn-primary" onClick={() => this.onDelete(id)}>Delete</button>
+            {is_admin ? <NavLink to={'/halls/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink> : null}
+            {is_admin ?<button type="button" className="btn btn-primary" onClick={() => this.onDelete(id)}>Delete</button> : null}
             {this.props.shows ? <ShowSchedule shows={this.props.shows}/> : null}
         </div>;
     }
