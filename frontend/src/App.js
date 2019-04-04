@@ -32,7 +32,6 @@ class App extends Component {
                     <Layout>
                         <Switch>
                             <AuthRoute path="/users/:id" component={UserDetail}/>
-                            <Route path="/users/:id/edit" component={UserForm}/>
                             <Route path="/login" component={Login}/>
                             <Route path="/logout" component={Logout}/>
                             <Route path="/register" component={Register}/>

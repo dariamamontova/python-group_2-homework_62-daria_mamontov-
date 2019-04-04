@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
+import axios from 'axios';
+import {USERS_URL} from "../../api-urls";
 import {userEdit, USER_EDIT_SUCCESS} from "../../store/actions/user-form";
 import connect from "react-redux/es/connect/connect";
 import {loadUser} from "../../store/actions/user-detail";
+import {HALL_EDIT_SUCCESS} from "../../store/actions/hall-edit";
 
 class UserForm extends Component {
     constructor(props) {
         super(props);
-        const {first_name, last_name, email, id} = this.props.user.user;
+        const {first_name, last_name, email, id} = props.user;
         this.state = {
             user: {
                 first_name, last_name, email, id,
@@ -17,19 +20,16 @@ class UserForm extends Component {
             submitEnabled: true,
         }
     }
-    componentDidMount() {
-        this.props.loadUser(this.props.match.params.id);
-    }
 
     submitForm = (event) => {
         event.preventDefault();
         const {auth} = this.props;
         return this.props.userEdit(this.state.user, auth.token).then(result => {
-            if(result.type === USER_EDIT_SUCCESS) {
-                this.props.history.push('/halls/' + result.user.id);
+            if (result.type === USER_EDIT_SUCCESS) {
+                this.props.history.push('/users/' + result.user.id);
             }
         });
-    };
+    }
 
     inputChanged = (event) => {
         const value = event.target.value;
@@ -101,17 +101,12 @@ class UserForm extends Component {
 }
 
 
-const mapStateToProps = state => {
-    return {
-        user: state.user,
-        auth: state.auth
-    }
-};
-
+const mapStateToProps = state => ({
+    auth: state.auth
+});
 const mapDispatchToProps = dispatch => {
     return {
-        userEdit: (user, token) => dispatch(userEdit(user, token)),
-        loadUser: (id) => dispatch(loadUser(id))
+        userEdit: (user, token) => dispatch(userEdit(user, token))
     }
 };
 
