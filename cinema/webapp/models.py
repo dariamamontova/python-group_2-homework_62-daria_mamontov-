@@ -20,6 +20,8 @@ class Movie(models.Model):
     categories = models.ManyToManyField('Category', related_name='film_category', verbose_name='Categories', blank=True)
     is_deleted = models.BooleanField(default=False)
 
+    objects = SoftDeleteManager()
+
     def get_absolute_url(self):
         return reverse('api_v1:movie-detail', kwargs={'pk': self.pk})
 

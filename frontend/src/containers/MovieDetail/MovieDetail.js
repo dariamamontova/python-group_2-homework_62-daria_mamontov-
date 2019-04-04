@@ -1,16 +1,13 @@
 import React, {Component} from 'react'
 import {NavLink} from "react-router-dom";
 import MovieCategories from "../../components/MovieCategories/MovieCategories";
-import {movieDetail} from "../../store/actions/movie-detail";
 import ShowSchedule from "../../components/ShowSchedule/ShowSchedule";
-import {movieList} from "../../store/actions/movie-list";
 import connect from "react-redux/es/connect/connect";
 import {loadMovie, loadShows} from "../../store/actions/movie-detail"
 
 
 
 class MovieDetail extends Component {
-
 
     componentDidMount() {
         this.props.loadMovie(this.props.match.params.id);

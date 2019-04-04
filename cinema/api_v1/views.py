@@ -23,7 +23,7 @@ class LoginView(ObtainAuthToken):
             'username': user.username,
             'is_admin': user.is_superuser,
             'is_staff': user.is_staff,
-            'id': user.id
+            'user_id': user.id
         })
 
 class TokenLoginView(APIView):
@@ -53,7 +53,7 @@ class BaseViewSet(viewsets.ModelViewSet):
 
 
 class MovieViewSet(BaseViewSet):
-    queryset = Movie.objects.all().order_by('-release_date')
+    queryset = Movie.objects.active().order_by('-release_date')
     serializer_class = MovieSerializer
 
     def perform_destroy(self, instance):
@@ -115,7 +115,7 @@ class UserCreateView(CreateAPIView):
     permission_classes = [AllowAny]
 
 
-class UserViewSet(BaseViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 

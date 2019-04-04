@@ -10,6 +10,7 @@ import registerReducer from "./register";
 import hallDetailReducer from "./hall-detail"
 import hallAddReducer from "./hall-add";
 import hallEditReducer from "./hall-edit";
+import userDetailReducer from "./user-detail"
 
 const rootReducer = combineReducers({
     login: loginReducer,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
     register: registerReducer,
     hallDetail: hallDetailReducer,
     hallAdd: hallAddReducer,
-    hallEdit: hallEditReducer
+    hallEdit: hallEditReducer,
+    userDetail: userDetailReducer
 });
 
 export default rootReducer;
