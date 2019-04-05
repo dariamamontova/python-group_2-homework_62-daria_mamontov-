@@ -34,7 +34,12 @@ class HallDetail extends Component {
             <h1>{name}</h1>
             {is_admin ? <NavLink to={'/halls/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink> : null}
             {is_admin ?<button type="button" className="btn btn-primary" onClick={() => this.onDelete(id)}>Delete</button> : null}
-            {this.props.hall.shows ? <ShowSchedule shows={this.props.hall.shows}/> : null}
+            {this.props.hall.shows ?
+                <div className="row">
+                    <ShowSchedule shows={this.props.hall.shows}/>
+                </div>
+
+                : null}
         </div>;
     }
 }

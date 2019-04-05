@@ -1,15 +1,29 @@
-import {MOVIES_URL, SHOWS_URL} from "../../api-urls";
+import {MOVIES_URL, SHOWS_URL, CATEGORIES_URL} from "../../api-urls";
 import axios from "axios";
 import moment from 'moment';
 
 export const MOVIE_DETAIL_REQUEST_SUCCESS = "MOVIE_DETAIL_REQUEST_SUCCESS";
 export const SHOWS_MOVIE_REQUEST_SUCCESS = "SHOWS_MOVIE_REQUEST_SUCCESS";
+export const CATEGORIES_REQUEST_SUCCESS = "CATEGORIES_REQUEST_SUCCESS";
 
 export const loadMovie = (id) => {
     return dispatch => {
         axios.get(MOVIES_URL + id).then(response => {
             console.log(response.data);
             return dispatch({type: MOVIE_DETAIL_REQUEST_SUCCESS, movie: response.data});
+        }).catch(error => {
+            console.log(error);
+            console.log(error.response);
+        });
+    }
+};
+
+export const loadCategories = (movieId) => {
+    const query = encodeURI(`movie_id=${movieId}`);
+    return dispatch => {
+        axios.get(`${CATEGORIES_URL}?${query}`).then(response => {
+            console.log(response.data);
+            return dispatch({type: CATEGORIES_REQUEST_SUCCESS, categories: response.data});
         }).catch(error => {
             console.log(error);
             console.log(error.response);

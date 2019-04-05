@@ -8,9 +8,17 @@ const formatDate = (dateString) => {
 
 const ShowSchedule = props => {
     return <div className="mt-4">
-        <h2>Расписание показов</h2>
+        <hr/>
+        <h5>Расписание показов</h5>
         {props.shows.map(show => {
-            return <p key={show.id}>{formatDate(show.starts_at)}, {show.hall_name}, {show.movie_name}</p>
+            return <div className="card my-3 text-sm-left border-danger" key={show.id}>
+                <div className="card-body">
+                    <p>Фильм: {show.movie_name}</p>
+                    <p>Зал: {show.hall_name}</p>
+                    <p>Начало: {formatDate(show.starts_at)}</p>
+                    <p>Окончание: {formatDate(show.finishes_at)}</p>
+                </div>
+            </div>
         })}
     </div>
 };

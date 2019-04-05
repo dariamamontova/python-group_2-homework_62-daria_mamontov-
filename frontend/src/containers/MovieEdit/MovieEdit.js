@@ -1,12 +1,18 @@
 import React, {Component, Fragment} from 'react'
 import MovieForm from "../../components/MovieForm/MovieForm";
 import {loadMovie, MOVIE_EDIT_SUCCESS, saveMovie} from "../../store/actions/movie-edit";
+import {loadCategories} from "../../store/actions/movie-detail"
 import {connect} from "react-redux";
 
 
 class MovieEdit extends Component {
     componentDidMount() {
         this.props.loadMovie(this.props.match.params.id);
+        this.props.loadCategories(this.props.match.params.id)
+    }
+
+    loadCategories = (id) => {
+        this.props.loadCategories(this.props.match.params.id)
     }
 
     formSubmitted = (movie) => {
@@ -36,7 +42,8 @@ const mapStateToProps = state => {
 const mapDispatchProps = dispatch => {
     return {
         loadMovie: (id) => dispatch(loadMovie(id)),
-        saveMovie: (movie, token) => dispatch(saveMovie(movie, token))
+        saveMovie: (movie, token) => dispatch(saveMovie(movie, token)),
+        loadCategories: (id) => dispatch(loadCategories(id))
     }
 };
 

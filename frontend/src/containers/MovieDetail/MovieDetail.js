@@ -3,9 +3,8 @@ import {NavLink} from "react-router-dom";
 import MovieCategories from "../../components/MovieCategories/MovieCategories";
 import ShowSchedule from "../../components/ShowSchedule/ShowSchedule";
 import connect from "react-redux/es/connect/connect";
-import {loadMovie, loadShows} from "../../store/actions/movie-detail"
+import {loadMovie, loadShows, loadCategories} from "../../store/actions/movie-detail"
 import {MOVIE_DELETE_SUCCESS, movieDelete} from "../../store/actions/movie-list";
-
 
 
 class MovieDetail extends Component {
@@ -13,6 +12,7 @@ class MovieDetail extends Component {
     componentDidMount() {
         this.props.loadMovie(this.props.match.params.id);
         this.loadShows(this.props.match.params.id)
+        this.loadCategories(this.props.match.params.id)
 
     }
 
@@ -20,9 +20,13 @@ class MovieDetail extends Component {
         this.props.loadShows(this.props.match.params.id);
     };
 
+    loadCategories = (id) => {
+        this.props.loadCategories(this.props.match.params.id)
+    }
+
     onDelete = (id) => {
         this.props.movieDelete(id, this.props.auth.token).then(result => {
-            if(result.type === MOVIE_DELETE_SUCCESS) {
+            if (result.type === MOVIE_DELETE_SUCCESS) {
                 this.props.history.push('/movies/');
             }
         });
@@ -40,7 +44,7 @@ class MovieDetail extends Component {
                 </div>
             </div> : null}
 
-            <h1>{name}</h1>
+            <h2>{name}</h2>
 
             {categories.length > 0 ? <MovieCategories categories={categories}/> : null}
 
@@ -48,9 +52,13 @@ class MovieDetail extends Component {
             {description ? <p>{description}</p> : null}
 
             {is_admin ? <NavLink to={'/movies/' + id + '/edit'} className="btn btn-primary mr-2">Edit</NavLink> : null}
-            {is_admin ? <button type="button" className="btn btn-primary" onClick={() => this.onDelete(id)}>Delete</button> : null}
-
-            {this.props.movie.shows ? <ShowSchedule shows={this.props.movie.shows}/> : null}
+            {is_admin ? <button type="button" className="btn btn-primary"
+                                onClick={() => this.onDelete(id)}>Delete</button> : null}
+            {this.props.movie.shows ?
+                <div className="row">
+                    <ShowSchedule shows={this.props.movie.shows}/>
+                </div>
+                : null}
         </div>;
     }
 }
@@ -65,7 +73,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     loadMovie: (id) => dispatch(loadMovie(id)),
     loadShows: (id) => dispatch(loadShows(id)),
-    movieDelete: (id, token) => dispatch(movieDelete(id, token))
+    movieDelete: (id, token) => dispatch(movieDelete(id, token)),
+    loadCategories: (id) => dispatch(loadCategories(id))
 });
 
 
