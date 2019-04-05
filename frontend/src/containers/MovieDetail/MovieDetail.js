@@ -11,8 +11,8 @@ class MovieDetail extends Component {
 
     componentDidMount() {
         this.props.loadMovie(this.props.match.params.id);
-        this.loadShows(this.props.match.params.id)
-        this.loadCategories(this.props.match.params.id)
+        this.loadShows(this.props.match.params.id);
+        this.loadCategories(this.props.match.params.id);
 
     }
 
